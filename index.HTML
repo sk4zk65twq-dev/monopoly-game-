@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arctic Ethics: PR Monopoly</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#030C14;color:#E8F0F8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse at 18% 22%,rgba(0,100,140,.13)0%,transparent 55%),radial-gradient(ellipse at 82% 78%,rgba(0,70,110,.09)0%,transparent 55%)}
+.bg::before{content:'';position:absolute;inset:0;background-image:radial-gradient(1px 1px at 8% 12%,rgba(255,255,255,.65)0%,transparent 100%),radial-gradient(1px 1px at 22% 48%,rgba(255,255,255,.45)0%,transparent 100%),radial-gradient(1px 1px at 38% 18%,rgba(255,255,255,.55)0%,transparent 100%),radial-gradient(1px 1px at 58% 68%,rgba(255,255,255,.38)0%,transparent 100%),radial-gradient(1.5px 1.5px at 32% 72%,rgba(0,212,187,.42)0%,transparent 100%),radial-gradient(1.5px 1.5px at 65% 10%,rgba(0,212,187,.32)0%,transparent 100%)}
+.aurora{position:fixed;top:0;left:0;right:0;height:28vh;background:linear-gradient(180deg,rgba(0,212,187,.06)0%,transparent 100%);animation:aurora 9s ease-in-out infinite;pointer-events:none;z-index:0}
+@keyframes aurora{0%,100%{opacity:.35;transform:translateX(-6%) scaleY(1)}50%{opacity:.65;transform:translateX(4%) scaleY(1.08)}}
+.z1{position:relative;z-index:1}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes si{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@keyframes fl{from{opacity:0;transform:rotateY(65deg) scale(.93)}to{opacity:1;transform:rotateY(0)}}
+@keyframes sk{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+.afu{animation:fu .42s ease both}.asi{animation:si .36s ease both}.afl{animation:fl .46s ease both}
+.d1{animation-delay:.07s}.d2{animation-delay:.14s}.d3{animation-delay:.21s}.d4{animation-delay:.28s}
+.screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px}
+.screent{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:28px 24px}
+.wrap{width:100%;max-width:720px;margin:0 auto;padding:0 14px}
+.card{background:rgba(8,20,44,.83);border:1px solid rgba(255,255,255,.07);border-radius:18px;backdrop-filter:blur(10px)}
+.btn{cursor:pointer;border:none;font-family:inherit;font-weight:600;transition:all .18s;outline:none}
+.btn:active:not(:disabled){transform:scale(.96)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.bteal{background:linear-gradient(135deg,#00D4BB,#0096A0);color:#030C14;border-radius:13px;padding:15px 36px;font-size:16px;box-shadow:0 6px 20px rgba(0,212,187,.22)}
+.bteal:hover:not(:disabled){box-shadow:0 10px 28px rgba(0,212,187,.38);transform:translateY(-2px)}
+.bout{background:transparent;border:2px solid #00D4BB;color:#00D4BB;border-radius:12px;padding:12px 28px;font-size:14px}
+.bout:hover:not(:disabled){background:rgba(0,212,187,.08)}
+.bsm{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);border-radius:9px;padding:6px 14px;font-size:12px;font-family:inherit;cursor:pointer}
+.bsm:hover{background:rgba(255,255,255,.1)}
+.obtn{width:100%;padding:14px 16px;border-radius:12px;background:rgba(5,14,32,.9);border:2px solid rgba(255,255,255,.08);text-align:left;cursor:pointer;transition:all .18s;font-family:inherit;color:#E8F0F8;font-size:14px;line-height:1.55}
+.obtn:hover:not(:disabled){border-color:rgba(0,212,187,.42);background:rgba(0,212,187,.05);transform:translateX(2px)}
+.obtn:disabled{cursor:default}
+.obtn.sg{border-color:#22C55E!important;background:rgba(34,197,94,.09)!important;animation:si .24s ease}
+.obtn.sy{border-color:#F59E0B!important;background:rgba(245,158,11,.09)!important;animation:sk .34s ease}
+.obtn.sr{border-color:#EF4444!important;background:rgba(239,68,68,.09)!important;animation:sk .34s ease}
+input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;color:#E8F0F8;font-size:15px;outline:none;font-family:inherit;transition:border .18s}
+input:focus{border-color:#00D4BB}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(0,212,187,.28);border-radius:2px}
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="aurora"></div>
+<div id="root"></div>
+<script>
+
+const TC=[’#00D4BB’,’#FF6B9D’,’#FFB800’];
+
+// ── THEMES ────────────────────────────────────────────────────────────────────
+// Each option has type: bad/gray/good — but text is written so none is obviously “wrong”
+// Options are shuffled on draw so А is not always bad
+const THEMES=[
+{
+n:1,e:‘📢’,title:‘Тема 1. Жалобы клиентов’,
+compare:‘Во всех трёх ситуациях агентство столкнулось с расхождением между обещаниями и реальностью. Промедление и шаблонные ответы кажутся безопасными, но именно они сильнее всего разрушают доверие.’,
+scores:{bad:{profit:0,rep:-3,risk:+2},gray:{profit:+1,rep:-2,risk:+1},good:{profit:-2,rep:+3,risk:-1}},
+vrd:{bad:{v:‘❌ Манипуляция’,c:‘п. 2.2.3 АКОС — уклонение от ответственности’},gray:{v:‘⚠️ Формальный ответ’,c:‘п. 2.2.4 АКОС — видимость прозрачности без сути’},good:{v:‘✅ Профессионально’,c:‘п. 2.2.4 АКОС — принцип максимальной прозрачности’}},
+variants:[
+{e:‘📱’,title:‘Фотосессия не входит’,
+text:‘Клиент опубликовал пост: обещанная фотосессия на льдине оказалась платной опцией. Публикация набирает репосты. Несколько журналистов уже написали в директ. У вас есть час до того, как ситуация выйдет из-под контроля.’,
+opts:[
+{type:‘good’,tx:‘Публично признать ошибку в описании, объяснить разницу пакетов и предложить клиенту компенсацию на выбор.’},
+{type:‘bad’,tx:‘Временно скрыть пост через жалобы на платформе — пока суть не прояснится, лучше снизить охват.’},
+{type:‘gray’,tx:‘Ответить вежливым стандартным сообщением с просьбой написать в личные сообщения для решения вопроса.’},
+]},
+{e:‘🏨’,title:‘Условия проживания’,
+text:‘Группа туристов обнаружила, что условия на полярной станции хуже, чем описано в буклете. Они угрожают Роспотребнадзором и масштабным постингом. Клиент просит вас «разрулить» ситуацию как можно тише.’,
+opts:[
+{type:‘gray’,tx:‘Связаться с каждым туристом лично, принести извинения и попросить не публиковать отзывы до завершения разбирательства.’},
+{type:‘bad’,tx:‘Подготовить публичное заявление о том, что описание полностью соответствует реальности, и предложить показать подтверждающие документы.’},
+{type:‘good’,tx:‘Признать несоответствие публично, предложить частичный возврат и инициировать пересмотр всех рекламных материалов.’},
+]},
+{e:‘🚢’,title:‘Экскурсия отменена’,
+text:‘За сутки до отъезда была тихо отменена ключевая экскурсия с полярным гидом. Клиенты узнали об этом только по прилёте. Несколько человек уже снимают видео с претензиями прямо на полярной станции.’,
+opts:[
+{type:‘bad’,tx:‘Объяснить отмену «форс-мажорными погодными условиями» и зафиксировать это в официальной коммуникации — без конкретики.’},
+{type:‘good’,tx:‘Честно объяснить причины, предложить перенос экскурсии или возврат её стоимости, опубликовать официальное заявление.’},
+{type:‘gray’,tx:‘Предложить альтернативную активность похожего формата, не акцентируя внимание на том, что оригинальная экскурсия была отменена.’},
+]},
+]
+},
+{
+n:2,e:‘🎭’,title:‘Тема 2. Нечестное продвижение’,
+hiddenOnBad:true,
+compare:‘Рейтинг, нативка, фейковые отзывы — три разных инструмента, одна схема: создать иллюзию независимого мнения. Все три нарушают Кодекс АКОС и ФЗ «О рекламе». Краткосрочный выигрыш здесь становится миной замедленного действия.’,
+scores:{bad:{profit:+3,rep:0,risk:+3},gray:{profit:+1,rep:+1,risk:0},good:{profit:0,rep:+2,risk:-1}},
+vrd:{bad:{v:‘❌ Нарушение’,c:‘п. 2.3.4 АКОС + ФЗ «О рекламе»’},gray:{v:‘⚠️ Серая зона’,c:‘п. 5.2 АКОС — маркировка должна быть явной’},good:{v:‘✅ Профессионально’,c:‘п. 5.6 АКОС — действовать от своего имени’}},
+variants:[
+{e:‘📊’,title:‘Рейтинг агентств’,
+text:‘Маркетолог клиента предлагает создать «независимый рейтинг арктических агентств» и распространить его через тревел-блогеров как реальное исследование. Клиент занял бы первое место. Конкуренты — в хвосте. Агентству предложена комиссия.’,
+opts:[
+{type:‘good’,tx:‘Отказаться от рейтинга и предложить честное сравнение пакетов, опубликованное от имени агентства.’},
+{type:‘bad’,tx:‘Согласиться — подобные рейтинги существуют на рынке повсеместно, и никто пока не доказал их нарушения.’},
+{type:‘gray’,tx:‘Запустить рейтинг, но добавить сноску «партнёрский материал» — этого достаточно для формального соблюдения требований.’},
+]},
+{e:‘📝’,title:‘Редакционный материал’,
+text:‘Редактор популярного тревел-журнала предлагает: материал «Топ-5 туров в Арктику» выйдет как редакционный контент, клиент на первом месте. Охват — 200 тысяч читателей. Пометки «реклама» не будет — редактор уверяет, что «так принято».’,
+opts:[
+{type:‘bad’,tx:‘Согласиться: подача как редакционного материала создаёт доверие, которое обычная реклама не даёт.’},
+{type:‘gray’,tx:‘Договориться о размещении с минимальной сноской «при поддержке» в конце материала.’},
+{type:‘good’,tx:‘Настоять на пометке «Реклама» в начале материала или отказаться от размещения в этом формате.’},
+]},
+{e:‘⭐’,title:‘Проблема с рейтингом’,
+text:‘У клиента средний рейтинг 3.2 на основных платформах. Менеджер предлагает схему: нанять людей, которые оставят 50 «реальных» отзывов. Конкуренты, по имеющимся данным, уже используют этот метод. За месяц рейтинг вырастет до 4.5.’,
+opts:[
+{type:‘gray’,tx:‘Предложить клиентам скидку на следующий тур в обмен на честный отзыв — это законная стимуляция обратной связи.’},
+{type:‘bad’,tx:‘Согласиться на схему: если конкуренты делают то же самое, отказ просто ставит клиента в невыгодное положение.’},
+{type:‘good’,tx:‘Отказаться и разработать органическую стратегию: проработка сервиса, работа с реальными отзывами и прозрачное реагирование на критику.’},
+]},
+]
+},
+{
+n:3,e:‘📱’,title:‘Тема 3. Медиа и инфлюенсеры’,
+compare:‘Блогер, журнал, TikTok — разные площадки, одни принципы. Прозрачность источника и маркировка рекламы обязательны везде. «Все так делают» — не аргумент: ответственность несёт агентство.’,
+scores:{bad:{profit:+2,rep:0,risk:+2},gray:{profit:+1,rep:+2,risk:0},good:{profit:0,rep:+1,risk:-1}},
+vrd:{bad:{v:‘❌ Нарушение’,c:‘п. 6.9 АКОС — скрытая реклама в медиа’},gray:{v:‘✅ Профессионально’,c:‘п. 5.2 АКОС — честное партнёрство с маркировкой’},good:{v:‘⚠️ Упущена возможность’,c:‘Допустимо, но неоптимально для роста клиента’}},
+variants:[
+{e:‘🎥’,title:‘Тревел-блогер’,
+text:‘Тревел-блогер с аудиторией 500 тысяч предлагает снять обзор тура. За фиксированную оплату. Он говорит, что если добавить пометку «реклама», охват упадёт вдвое, и предлагает «оставить этот момент на ваше усмотрение».’,
+opts:[
+{type:‘bad’,tx:‘Оплатить публикацию без маркировки — аудитория воспринимает такой контент органично, а значит, эффект выше.’},
+{type:‘good’,tx:‘Отказаться от платного формата и предложить бесплатный пресс-тур без условий — блогер сам решает, публиковать или нет.’},
+{type:‘gray’,tx:‘Оформить честное партнёрство с обязательной пометкой «реклама» в начале публикации.’},
+]},
+{e:‘📰’,title:‘Независимый обзор’,
+text:‘Редакция тревел-журнала предлагает рекламный материал, оформленный под независимый обзор. Визуально он неотличим от редакционных статей. Тираж — 150 тысяч. Стоимость — треть обычной рекламной полосы.’,
+opts:[
+{type:‘gray’,tx:‘Согласиться при условии явной пометки «Партнёрский материал» в начале — тогда это соответствует стандартам.’},
+{type:‘bad’,tx:‘Согласиться на формат без маркировки: редакция берёт на себя ответственность за контент, агентство только платит.’},
+{type:‘good’,tx:‘Отказаться от псевдоредакционного формата и предложить честную рекламную вставку с прозрачной подачей.’},
+]},
+{e:‘📲’,title:‘TikTok и алгоритм’,
+text:‘TikTok-блогер с 800 тысячами подписчиков хочет снять ролик о туре, но говорит прямо: с пометкой «реклама» алгоритм срежет охват в три раза. Он предлагает снять «честный личный обзор» — но за оплату.’,
+opts:[
+{type:‘bad’,tx:‘Согласиться: алгоритмические ограничения — реальная проблема, и обходить их через «личный формат» стало нормой в индустрии.’},
+{type:‘good’,tx:‘Отказаться и поискать блогера меньшего масштаба, но готового работать прозрачно с пометкой.’},
+{type:‘gray’,tx:‘Договориться о честном формате с маркировкой в начале ролика — пусть охват меньше, но без правовых рисков.’},
+]},
+]
+},
+{
+n:4,e:‘🚨’,title:‘Тема 4. Кризис в медиапространстве’,
+compare:‘Журналист, блогер, открытое письмо — форматы разные, принцип один: уклонение и давление только усиливают кризис. Скорость и честность реакции — единственная эффективная стратегия.’,
+scores:{bad:{profit:+1,rep:-3,risk:+3},gray:{profit:0,rep:-1,risk:+2},good:{profit:-1,rep:+3,risk:-2}},
+vrd:{bad:{v:‘❌ Нарушение’,c:‘п. 5.3 АКОС — запрет вводящей в заблуждение информации для СМИ’},gray:{v:‘⚠️ Уклонение’,c:‘п. 5.3 АКОС — молчание не нейтрально, оно трактуется против вас’},good:{v:‘✅ Профессионально’,c:‘п. 5.3 АКОС — всестороннее взаимодействие со СМИ’}},
+variants:[
+{e:‘🔍’,title:‘Журналист-расследователь’,
+text:‘Журналист федерального издания выходит на связь: у него есть конкретные данные о нарушениях. Публикация выйдет завтра утром с вашим комментарием или без него. У вас три часа на ответ.’,
+opts:[
+{type:‘bad’,tx:‘Ответить, что все обвинения беспочвенны, и предупредить редакцию о готовности к судебному иску за клевету.’},
+{type:‘good’,tx:‘Подготовить развёрнутый официальный комментарий: признать проблемы, описать шаги по их устранению.’},
+{type:‘gray’,tx:‘Направить стандартный ответ «Без комментариев» — это юридически безопасно и не создаёт дополнительных рисков.’},
+]},
+{e:‘📹’,title:‘Разоблачительный ролик’,
+text:‘Блогер выпустил 20-минутный ролик с детальным разбором практик клиента. За сутки — 300 тысяч просмотров. Аудитория требует официальной реакции. Клиент хочет подать жалобу на платформу и добиться удаления.’,
+opts:[
+{type:‘gray’,tx:‘Написать взвешенный нейтральный ответ в комментариях — без признания и без опровержения конкретных фактов.’},
+{type:‘bad’,tx:‘Подать жалобы на нарушение авторских прав через платформу, чтобы добиться удаления ролика или его блокировки.’},
+{type:‘good’,tx:‘Опубликовать официальное заявление с честной позицией по каждому пункту из ролика, включая признание ошибок.’},
+]},
+{e:‘✉️’,title:‘Открытое письмо’,
+text:‘Пятеро туристов написали открытое письмо в отраслевое издание с конкретными претензиями. Редакция запросила официальную позицию агентства до публикации — срок ответа: 24 часа.’,
+opts:[
+{type:‘good’,tx:‘Подготовить развёрнутый ответ по каждому пункту и предложить авторам письма встречу для урегулирования.’},
+{type:‘bad’,tx:‘Связаться с редакцией и объяснить, что публикация письма без ответа агентства нарушает принцип объективности.’},
+{type:‘gray’,tx:‘Направить краткий ответ: «Ситуация изучается, подробная позиция будет опубликована в течение недели».’},
+]},
+]
+},
+{
+n:5,e:‘🧭’,title:‘Тема 5. Долгосрочная стратегия’,
+compare:‘Стратегический выбор — самый сложный, потому что последствия проявляются не сразу. Агрессивный PR даёт быстрый результат, но делает агентство заложником рисков, которые накапливались все предыдущие раунды.’,
+scores:{bad:{profit:+3,rep:0,risk:+3},gray:{profit:+1,rep:+1,risk:+1},good:{profit:0,rep:+3,risk:-1}},
+vrd:{bad:{v:‘⚠️ Высокий риск’,c:‘п. 1.5 АКОС — нарушение принципов добросовестной конкуренции’},gray:{v:‘⚠️ Нейтрально’,c:‘Разумный баланс, но долгосрочные риски не устраняются’},good:{v:‘✅ Профессионально’,c:‘п. 2.1 АКОС — честность и объективность как основа бренда’}},
+variants:[
+{e:‘📈’,title:‘Коммуникационная стратегия’,
+text:‘Клиент хочет утвердить стратегию на следующий год. Конкуренты вкладываются в агрессивное продвижение. Рынок растёт. Вам нужно предложить подход — и обосновать его.’,
+opts:[
+{type:‘gray’,tx:‘Смешанный подход: часть бюджета — на честные инструменты, часть — на агрессивное продвижение там, где это не противоречит законодательству.’},
+{type:‘good’,tx:‘Стратегия полной прозрачности: реальные истории клиентов, открытое описание продукта, работа с отзывами в режиме реального времени.’},
+{type:‘bad’,tx:‘Максимальное давление на рынок: медийное доминирование, ситуативный PR и быстрый захват аудитории любыми эффективными методами.’},
+]},
+{e:‘🤝’,title:‘Ответ на конкурентов’,
+text:‘Конкурент запустил кампанию «Честный туризм»: открытое описание всех условий, без звёздочек. Кампания получает высокий органический отклик и формирует новый стандарт на рынке.’,
+opts:[
+{type:‘bad’,tx:‘Быстро запустить похожую кампанию под другим названием — присвоить повестку раньше, чем конкурент её монополизирует.’},
+{type:‘good’,tx:‘Предложить клиенту системные изменения: пересмотреть описания, ввести прозрачное ценообразование и открытый диалог с аудиторией.’},
+{type:‘gray’,tx:‘Частично перенять подход конкурента — улучшить описания туров, но сохранить нынешнее позиционирование без кардинальных изменений.’},
+]},
+{e:‘🔄’,title:‘Стратегия после кризиса’,
+text:‘После серии скандалов рейтинг клиента упал до 3.1. Необходима репутационная стратегия на 12 месяцев. Клиент ждёт быстрого результата и намекает, что готов рассмотреть «любые методы».’,
+opts:[
+{type:‘good’,tx:‘Честная работа с отзывами, реальное улучшение продукта и прозрачная коммуникация — без shortcuts.’},
+{type:‘bad’,tx:‘Запустить масштабную кампанию с искусственными отзывами и управляемыми рейтингами — быстрый результат при условии грамотного исполнения.’},
+{type:‘gray’,tx:‘Сочетать реальные улучшения сервиса с агрессивным продвижением позитивного контента — баланс скорости и устойчивости.’},
+]},
+]
+},
+{
+n:6,e:‘📝’,title:‘Тема 6. Финальный контракт’,
+compare:‘Финальный раунд проверяет: есть ли у агентства черта, которую оно не переступит ради контракта? Самые высокие баллы здесь у тех, кто последовательно выстраивал репутацию — а не у тех, кто принял самое выгодное предложение.’,
+scores:{bad:{profit:+4,rep:-1,risk:+3},gray:{profit:+2,rep:+1,risk:+1},good:{profit:0,rep:+3,risk:-1}},
+vrd:{bad:{v:‘❌ Нарушение’,c:‘п. 2.3.3 АКОС — участие в проекте, противоречащем профессиональной этике’},gray:{v:‘⚠️ Компромисс’,c:‘п. 2.1 АКОС — частичное соблюдение принципов’},good:{v:‘✅ Профессионально’,c:‘п. 1.3 АКОС — социальная ответственность перед обществом’}},
+variants:[
+{e:‘💼’,title:‘Инвестор с условиями’,
+text:‘Крупный инвестор предлагает трёхлетний контракт на продвижение нового арктического курорта. Условие: скрытие негативных отзывов и управление рейтингами через проверенные схемы. Вознаграждение — выше рыночного в два раза.’,
+opts:[
+{type:‘bad’,tx:‘Принять контракт: условия — стандартная практика в этом сегменте, а финансовая стабильность позволит агентству расти.’},
+{type:‘good’,tx:‘Отказаться: репутация агентства стоит дороже одного контракта, и в долгосрочной перспективе это правильное решение.’},
+{type:‘gray’,tx:‘Войти в переговоры и попытаться исключить из контракта наиболее сомнительные пункты, сохранив партнёрство.’},
+]},
+{e:‘🤝’,title:‘Стратегическое партнёрство’,
+text:‘Туристический холдинг предлагает стратегическое партнёрство на три года. Условие соглашения о конфиденциальности: агентство не раскрывает известные ему проблемы с качеством туров холдинга. Контракт открывает доступ к новым клиентам.’,
+opts:[
+{type:‘gray’,tx:‘Принять партнёрство, но добиться исключения пункта о молчании по качеству продукта.’},
+{type:‘bad’,tx:‘Подписать полное соглашение: конфиденциальность — стандартная деловая практика, не противоречащая законодательству.’},
+{type:‘good’,tx:‘Отказаться: соучастие в замалчивании информации противоречит принципам агентства вне зависимости от масштаба партнёра.’},
+]},
+{e:‘🏛️’,title:‘Государственный контракт’,
+text:‘Региональная туристическая структура предлагает крупный государственный контракт. Одно условие: в PR-коммуникациях не упоминаются экологические нарушения в зонах маршрутов — данные есть, но «это не наш вопрос».’,
+opts:[
+{type:‘bad’,tx:‘Подписать: экологическая повестка — вопрос профильных органов, а не PR-агентства. Контракт создаёт важный прецедент на рынке.’},
+{type:‘good’,tx:‘Отказаться: скрытие экологических данных — это вопрос общественной ответственности, который агентство не может игнорировать.’},
+{type:‘gray’,tx:‘Попробовать выговорить более мягкую формулировку: не «умалчивать», а «не акцентировать» — и сохранить контракт.’},
+]},
+]
+},
+];
+
+// ── RANDOM EVENTS ─────────────────────────────────────────────────────────────
+const RE_POOL=[
+{id:‘re1’,e:‘🔎’,t:‘Журналист начал расследование’,tx:‘Независимый журналист изучает PR-практики на рынке арктического туризма. Исход зависит от накопленного уровня риска.’,good:{tx:‘Низкий риск — расследование вас не затронуло.’,profit:0,rep:+1,risk:-1},bad:{tx:‘Накопленный риск привлёк внимание. Агентство упомянуто в материале.’,profit:-1,rep:-3,risk:+1},riskBased:true,thr:4},
+{id:‘re2’,e:‘💬’,t:‘Вирусный отзыв клиента’,tx:‘Клиент опубликовал развёрнутый отзыв о туре. Тысячи просмотров. Характер зависит от накопленной репутации.’,good:{tx:‘Высокая репутация — отзыв оказался позитивным. Органический рост доверия.’,profit:+1,rep:+2,risk:0},bad:{tx:‘Низкая репутация — отзыв жёсткий и получил широкий охват.’,profit:0,rep:-2,risk:+1},repBased:true,thr:6},
+{id:‘re3’,e:‘⚖️’,t:‘Иск в суд’,tx:‘Клиент подал иск, ссылаясь на несоответствие реальности и описания. Исход зависит от уровня накопленного риска.’,good:{tx:‘Низкий риск позволил урегулировать дело мирно, без серьёзных потерь.’,profit:-1,rep:0,risk:-1},bad:{tx:‘Высокий риск привёл к полноценному судебному делу. Штраф и репутационный удар.’,profit:-2,rep:-2,risk:0},riskBased:true,thr:4},
+{id:‘re4’,e:‘🏆’,t:‘Отраслевая премия’,tx:‘Ассоциация туристических агентств объявила ежегодные номинации. Шансы зависят от репутации.’,good:{tx:‘Ваша репутация принесла номинацию. Публичное признание на рынке.’,profit:0,rep:+3,risk:-1},bad:{tx:‘Репутация оказалась недостаточной. Номинация досталась конкурентам.’,profit:0,rep:-1,risk:0},repBased:true,thr:7},
+{id:‘re5’,e:‘📰’,t:‘Скандал у конкурентов’,tx:‘Крупный конкурент попал в скандал с поддельными отзывами. Реакция рынка зависит от вашего профиля.’,good:{tx:‘Ваш чистый профиль позволил дистанцироваться. Доверие аудитории выросло.’,profit:+1,rep:+1,risk:0},bad:{tx:‘Ваши риски поставили вас рядом с конкурентом в глазах рынка.’,profit:0,rep:-1,risk:+1},riskBased:true,thr:3},
+{id:‘re6’,e:‘📋’,t:‘Проверка ФАС’,tx:‘ФАС проверяет агентства на предмет нарушений рекламного законодательства.’,good:{tx:‘Нарушений не выявлено. Чистая репутация подтверждена официально.’,profit:0,rep:+2,risk:-2},bad:{tx:‘Нарушения зафиксированы. Штраф и предписание об устранении.’,profit:-2,rep:-1,risk:0},riskBased:true,thr:4},
+];
+
+const HIDDEN={e:‘💥’,t:‘Фейковый рейтинг разоблачён’,
+tx:‘Журналисты-расследователи установили: рейтинг агентств, опубликованный как независимое исследование, был создан по заказу. Материал с разоблачением набрал десятки тысяч репостов, редакции ведущих изданий запросили комментарии.’,
+eff:{profit:-1,rep:-5,risk:+4}};
+
+const ENDINGS={
+scandal:{emoji:‘🔥’,color:’#EF4444’,title:‘Скандал’,badge:‘Разоблачённый манипулятор’,tx:‘Накопленные риски превратились в публичный скандал. Агентство потеряло ключевых клиентов и партнёров. Репутацию, которую строят годами, удалось разрушить за несколько недель безответственных решений.’},
+manipulator:{emoji:‘💸’,color:’#F97316’,title:‘Быстрая прибыль’,badge:‘Манипулятор’,tx:‘Вы заработали значительную прибыль, но ценой репутации. Клиенты замечают несоответствия, партнёры сомневаются в надёжности. Стратегия дала результат, но устойчивость под вопросом.’},
+strategist:{emoji:‘⚖️’,color:’#F59E0B’,title:‘Осторожный стратег’,badge:‘Стратег’,tx:‘Вы нашли баланс между коммерческими интересами и принципами. Агентство работает стабильно: без громких побед, но и без серьёзных провалов. Устойчивая позиция — ваш главный актив.’},
+ethical:{emoji:‘🌟’,color:’#22C55E’,title:‘Этичный успех’,badge:‘Этичный лидер’,tx:‘Вы доказали: честность — это конкурентное преимущество, а не ограничение. Репутация стала главным активом агентства. Клиенты рекомендуют, партнёры доверяют, рынок признаёт вас эталоном.’},
+mediocre:{emoji:‘📉’,color:’#6B7280’,title:‘Неопределённость’,badge:‘Новичок’,tx:‘Смешанные решения — смешанные результаты. Агентство существует, но без чёткого позиционирования. Рынок воспринимает вас как одного из многих — без сильной истории и репутации.’},
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let G={
+scr:‘title’,nT:3,sN:[’’,’’,’’],
+teams:[],theme:0,curTeam:0,
+shuffledOpts:null, // shuffled options for current turn
+choice:null,revd:false,
+timer:40,tmax:40,trun:false,
+vmap:[],eventNum:0,curOutcomes:[],hiddenShown:false,
+};
+let TI=null;
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+const esc=s=>String(s).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’);
+const sfl=a=>{const b=[…a];for(let i=b.length-1;i>0;i–){const j=0|Math.random()*(i+1);[b[i],b[j]]=[b[j],b[i]]}return b};
+function applyFx(t,fx){t.profit=Math.max(0,t.profit+(fx.profit||0));t.rep=Math.max(0,t.rep+(fx.rep||0));t.risk=Math.max(0,t.risk+(fx.risk||0));}
+function evtOut(ev,t){if(ev.repBased)return t.rep>=ev.thr?ev.good:ev.bad;return t.risk>=ev.thr?ev.bad:ev.good;}
+function getEnding(t){
+const{profit,rep,risk}=t;
+if(risk>=10)return ENDINGS.scandal;
+if(rep>=13&&risk<=4)return ENDINGS.ethical;
+if(profit>=12&&rep<=6)return ENDINGS.manipulator;
+if(profit>=8&&rep>=7&&risk<=7)return ENDINGS.strategist;
+return ENDINGS.mediocre;
+}
+function statCol(k,v){if(k===‘risk’)return v<=2?’#22C55E’:v<=5?’#F59E0B’:’#EF4444’;if(k===‘rep’)return’#A78BFA’;return’#4ADE80’;}
+function fxC(k,v){return(k!==‘risk’&&v>0)||(k===‘risk’&&v<0)?’#4ADE80’:’#F87171’;}
+function fxB(k,v){return(k!==‘risk’&&v>0)||(k===‘risk’&&v<0)?‘rgba(74,222,128,.1)’:‘rgba(239,68,68,.1)’;}
+
+// ── TIMER ─────────────────────────────────────────────────────────────────────
+function startT(){
+clearInterval(TI);G.trun=true;
+TI=setInterval(()=>{
+if(G.timer>0){G.timer–;updTUI();}
+else{clearInterval(TI);G.trun=false;onTimeout();}
+},1000);
+}
+function pauseT(){clearInterval(TI);G.trun=false;updTUI();}
+function updTUI(){
+const bar=document.getElementById(‘tbar’),lbl=document.getElementById(‘tlbl’),tpb=document.getElementById(‘tpb’);
+if(!bar)return;
+const pct=G.timer/G.tmax*100,col=pct>50?’#00D4BB’:pct>25?’#F59E0B’:’#EF4444’;
+bar.style.width=pct+’%’;bar.style.background=col;
+if(lbl){lbl.textContent=G.timer+‘с’;lbl.style.color=col;}
+if(tpb)tpb.textContent=G.trun?‘⏸’:‘▶’;
+}
+function onTimeout(){
+const t=G.teams[G.curTeam];
+if(!G.choice){t.timedOut=true;G.choice=‘TO’;applyFx(t,{profit:-1,rep:-2,risk:0});}
+G.revd=true;G.scr=‘teamresult’;R();
+}
+
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function sbar(lbl,val,max,col){
+const pct=Math.min(100,Math.max(0,val/max*100));
+return`<div style="margin-bottom:6px"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:10px;color:rgba(255,255,255,.33);letter-spacing:1px;text-transform:uppercase">${lbl}</span><span style="font-size:15px;font-weight:700;color:${col}">${val}</span></div><div style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};transition:width .5s;border-radius:2px"></div></div></div>`;
+}
+
+function turnStrip(){
+const th=THEMES[G.theme];
+return`<div style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:stretch"> ${G.teams.map((t,i)=>{ const done=i<G.curTeam,cur=i===G.curTeam; return`<div style="flex:1;min-width:85px;padding:8px 10px;border-radius:10px;border:1px solid ${cur?t.color:done?'rgba(255,255,255,.06)':'rgba(255,255,255,.04)'};background:${cur?`${t.color}12`:'rgba(255,255,255,.02)'};text-align:center">
+<div style="font-size:9px;color:${cur?t.color:done?'#22C55E':'rgba(255,255,255,.15)'};letter-spacing:1px;text-transform:uppercase;margin-bottom:2px">${done?‘✓’:cur?‘→ ходит’:‘ждёт’}</div>
+<div style="font-size:11px;font-weight:600;color:${cur?t.color:done?'rgba(255,255,255,.45)':'rgba(255,255,255,.22)'};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.name)}</div>
+</div>`;
+}).join(’’)}
+<div style="padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.04);background:rgba(255,255,255,.02);display:flex;flex-direction:column;align-items:center;justify-content:center">
+<div style="font-size:9px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase">ТЕМА</div>
+<div style="font-size:16px;font-weight:700;color:rgba(255,255,255,.35)">${G.theme+1}/6</div>
+</div>
+
+  </div>`;
+}
+
+function miniScores(){
+return`<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap"> ${G.teams.map(t=>`<div style="flex:1;min-width:85px;padding:9px 10px;border-radius:11px;background:rgba(8,20,44,.7);border:1px solid ${t.color}22">
+<div style="font-size:10px;color:${t.color};font-weight:600;margin-bottom:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(t.name)}</div>
+<div style="display:flex;gap:5px;font-size:11px;font-weight:700;flex-wrap:wrap">
+<span style="color:#4ADE80">💰${t.profit}</span>
+<span style="color:#A78BFA">⭐${t.rep}</span>
+<span style="color:${statCol('risk',t.risk)}">⚖️${t.risk}</span>
+</div>
+</div>`).join(’’)}
+
+  </div>`;
+}
+
+// ── SCREENS ───────────────────────────────────────────────────────────────────
+function rTitle(){
+return`<div class="screen z1"><div style="text-align:center;max-width:500px">
+<div class="afu" style="font-size:11px;letter-spacing:5px;color:#00D4BB;margin-bottom:10px;text-transform:uppercase;opacity:.8">Интерактивная игра</div>
+<h1 class="afu d1" style="font-family:Georgia,serif;font-size:clamp(32px,5vw,52px);line-height:1.1;margin-bottom:8px;font-weight:700">❄️ Arctic Ethics<br><span style="color:#00D4BB">PR Monopoly</span></h1>
+<p class="afu d2" style="color:rgba(255,255,255,.45);font-size:16px;margin-bottom:40px;font-style:italic">«Репутация или прибыль — что вы выберете?»</p>
+<div class="afu d3" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+<button class="btn bteal" onclick="G.scr='setup';R()">▶ Начать игру</button>
+<button class="btn bout" onclick="G.scr='rules';R()">📜 Правила</button>
+</div>
+
+  </div></div>`;
+}
+
+function rRules(){
+const steps=[
+‘1. Каждая тема — одна общая проблема и три разные ситуации внутри неё’,
+‘2. Команды отвечают по очереди — у каждой своя ситуация, красть ответы бессмысленно’,
+‘3. Варианты ответов перемешиваются — A не всегда «плохой», В не всегда «хороший»’,
+‘4. У каждой команды 40 секунд. Не успел — штраф и выбор заблокирован’,
+‘5. После тем 2 и 4 — случайные события с разным исходом для каждой команды’,
+‘6. Некоторые решения имеют скрытые последствия, которые проявятся позже’,
+];
+return`<div class="screent z1"><div style="max-width:620px;width:100%;padding-top:8px"> <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px"> <button class="bsm" onclick="G.scr='title';R()">← Назад</button> <h2 style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#00D4BB">📜 Правила игры</h2> </div> <div class="card" style="padding:26px;margin-bottom:16px"> <div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:#00D4BB;margin-bottom:8px">🎯 Цель</div><p style="color:rgba(255,255,255,.55);font-size:13px;line-height:1.7">Привести своё PR-агентство к наилучшему итогу. Победитель — команда с максимальной суммой: Прибыль + Репутация − Риск.</p></div> <div style="margin-bottom:18px"><div style="font-size:13px;font-weight:700;color:#00D4BB;margin-bottom:8px">📊 Три показателя</div><div style="display:flex;gap:10px;flex-wrap:wrap">${[['💰 Прибыль','#4ADE80','Финансовый результат'],['⭐ Репутация','#A78BFA','Доверие на рынке'],['⚖️ Риск','#F87171','Накопленные риски']].map(([l,c,d])=>`<div style="flex:1;min-width:120px;padding:10px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)"><div style="font-size:13px;font-weight:700;color:${c};margin-bottom:2px">${l}</div><div style="font-size:11px;color:rgba(255,255,255,.4)">${d}</div></div>`).join('')}</div></div> <div><div style="font-size:13px;font-weight:700;color:#00D4BB;margin-bottom:8px">⚙️ Как проходит игра</div><div style="display:flex;flex-direction:column;gap:7px">${steps.map(s=>`<div style="font-size:13px;color:rgba(255,255,255,.6);padding:8px 12px;background:rgba(255,255,255,.03);border-radius:8px;border-left:2px solid rgba(0,212,187,.3)">${s}</div>`).join(’’)}</div></div>
+</div>
+<button class="btn bteal" style="width:100%" onclick="G.scr='title';R()">← Вернуться на главную</button>
+
+  </div></div>`;
+}
+
+function rSetup(){
+const n=G.nT;
+let inp=’’;
+for(let i=0;i<n;i++)inp+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><div style="width:10px;height:10px;border-radius:50%;background:${TC[i]};flex-shrink:0;box-shadow:0 0 8px ${TC[i]}"></div><input type="text" id="tn${i}" value="${esc(G.sN[i])}" placeholder="Название агентства ${i+1}..."/></div>`;
+return`<div class="screen z1"><div style="max-width:420px;width:100%"> <div class="afu" style="text-align:center;margin-bottom:28px"> <div style="font-size:11px;letter-spacing:5px;color:#00D4BB;margin-bottom:8px;text-transform:uppercase;opacity:.8">Создание команд</div> <h2 style="font-family:Georgia,serif;font-size:26px;font-weight:700;margin-bottom:8px">Ваши PR-агентства</h2> <p style="color:rgba(255,255,255,.4);font-size:14px">Вы — конкурирующие команды на рынке арктического туризма.</p> </div> <div class="card afu d1" style="padding:24px"> <div style="margin-bottom:20px"><div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;margin-bottom:11px">Число команд</div><div style="display:flex;gap:10px">${[2,3].map(nn=>`<button class="btn" onclick="setNC(${nn})" style="flex:1;padding:13px 0;border-radius:11px;font-size:20px;font-weight:700;border:2px solid ${n===nn?'#00D4BB':'rgba(255,255,255,.08)'};background:${n===nn?'rgba(0,212,187,.1)':'transparent'};color:${n===nn?'#00D4BB':'rgba(255,255,255,.3)'}">${nn}</button>`).join(’’)}</div></div>
+<div style="margin-bottom:24px"><div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;margin-bottom:11px">Названия агентств</div>${inp}</div>
+<button class="btn bteal" style="width:100%" onclick="startG()">▶ Начать симуляцию</button>
+</div>
+
+  </div></div>`;
+}
+
+function rIntro(){
+return`<div class="screen z1"><div style="max-width:540px;width:100%"><div class="card afu" style="padding:30px;border-color:rgba(0,212,187,.18)">
+<div style="font-size:32px;text-align:center;margin-bottom:14px">❄️</div>
+<h2 style="font-family:Georgia,serif;font-size:24px;font-weight:700;text-align:center;margin-bottom:18px;color:#00D4BB">Добро пожаловать в Арктику</h2>
+<div style="color:rgba(255,255,255,.62);font-size:14px;line-height:1.85;margin-bottom:18px">
+<p style="margin-bottom:10px">Вы — ведущие PR-агентства, приглашённые работать с туристическим рынком экстремальных экспедиций.</p>
+<p style="margin-bottom:10px">Один из ваших ключевых клиентов — компания «Северный ветер», организующая дорогостоящие туры на Северный полюс.</p>
+<p>Рынок нестабилен: клиенты жалуются, конкуренты используют серые методы, журналисты ищут скандалы.</p>
+</div>
+<div style="background:rgba(255,184,0,.07);border:1px solid rgba(255,184,0,.18);border-radius:11px;padding:13px;margin-bottom:16px">
+<div style="font-size:12px;font-weight:700;color:#FFB800;margin-bottom:4px">⚠️ Важно знать</div>
+<div style="font-size:13px;color:rgba(255,255,255,.5)">Варианты ответов перемешаны — нет «очевидно правильного» А или В. Думайте, а не угадывайте.</div>
+</div>
+<button class="btn bteal" style="width:100%;font-size:16px;padding:15px" onclick="G.scr='teamplay';R();startT()">▶ Играть</button>
+
+  </div></div></div>`;
+}
+
+function rTeamPlay(){
+const t=G.teams[G.curTeam],th=THEMES[G.theme];
+const vi=G.vmap[G.theme][G.curTeam];
+const v=th.variants[vi];
+const timerPct=G.timer/G.tmax*100;
+const timerCol=timerPct>50?’#00D4BB’:timerPct>25?’#F59E0B’:’#EF4444’;
+const alreadyChose=G.choice!==null;
+
+let optHtml=’’;
+if(alreadyChose&&G.choice===‘TO’){
+optHtml=`<div style="text-align:center;padding:20px;color:rgba(255,255,255,.35);font-size:14px">⏱ Время вышло<br><span style="font-size:12px;color:#EF4444;margin-top:6px;display:block">−1 💰 −2 ⭐</span></div>`;
+} else {
+optHtml=G.shuffledOpts.map((o,idx)=>{
+const label=[‘А’,‘Б’,‘В’][idx];
+const sel=G.choice===idx;
+const cls=sel?(o.type===‘good’?‘sg’:o.type===‘gray’?‘sy’:‘sr’):’’;
+return`<button class="obtn ${cls}" onclick="pickOpt(${idx})" ${alreadyChose?'disabled':''}><span style="display:flex;gap:10px;align-items:flex-start"><span style="width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#00D4BB;flex-shrink:0">${label}</span><span>${esc(o.tx)}</span></span></button>`;
+}).join(’’);
+}
+
+return`<div class="z1 wrap" style="padding-top:18px;padding-bottom:28px"> ${turnStrip()} ${miniScores()} <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px"> <div style="display:flex;align-items:center;gap:10px"> <span style="font-size:20px">${v.e}</span> <div> <div style="font-size:10px;color:${t.color};letter-spacing:2px;text-transform:uppercase">Ход: ${esc(t.name)}</div> <h3 style="font-family:Georgia,serif;font-size:18px;font-weight:700">${esc(v.title)}</h3> </div> </div> <div style="display:flex;align-items:center;gap:8px"> <span id="tlbl" style="font-size:17px;font-weight:700;color:${timerCol}">${G.timer}с</span> ${!alreadyChose?`<button class="bsm" id="tpb" onclick="G.trun?pauseT():startT();updTUI()">${G.trun?‘⏸’:‘▶’}</button>`:''} </div> </div> <div style="height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:14px"> <div id="tbar" style="height:100%;width:${timerPct}%;background:${timerCol};transition:width 1s linear;border-radius:2px"></div> </div> <div class="card" style="padding:18px 20px;margin-bottom:14px;border-color:${t.color}22"> <p style="font-size:15px;line-height:1.8;color:rgba(255,255,255,.82)">${esc(v.text)}</p> </div> <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px">${optHtml}</div> ${alreadyChose?`<button class="btn bteal" style="width:100%;font-size:16px;padding:14px" onclick="doReveal()">🔓 Раскрыть результат</button>`:’’}
+
+  </div>`;
+}
+
+function rTeamResult(){
+const t=G.teams[G.curTeam],th=THEMES[G.theme];
+const vi=G.vmap[G.theme][G.curTeam];
+const v=th.variants[vi];
+const isLast=G.curTeam===G.nT-1;
+let resultBlock=’’;
+if(G.choice===‘TO’||t.timedOut){
+resultBlock=`<div style="padding:18px;background:rgba(107,114,128,.07);border:1px solid rgba(107,114,128,.2);border-radius:12px;text-align:center"><div style="font-size:15px;color:rgba(255,255,255,.5);margin-bottom:6px">⏱ Время вышло</div><div style="font-size:13px;color:#EF4444">−1 к прибыли, −2 к репутации</div></div>`;
+} else if(G.choice!==null){
+const o=G.shuffledOpts[G.choice];
+const sc=th.scores[o.type],vrd=th.vrd[o.type];
+const vc=o.type===‘good’?’#22C55E’:o.type===‘gray’?’#F59E0B’:’#EF4444’;
+const vbg=o.type===‘good’?‘rgba(34,197,94,.08)’:o.type===‘gray’?‘rgba(245,158,11,.08)’:‘rgba(239,68,68,.08)’;
+const label=[‘А’,‘Б’,‘В’][G.choice];
+const fxRow=[[‘profit’,‘💰’,sc.profit],[‘rep’,‘⭐’,sc.rep],[‘risk’,‘⚖️’,sc.risk]].filter(x=>x[2]!==0).map(([k,ic,vv])=>`<span style="font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;background:${fxB(k,vv)};color:${fxC(k,vv)}">${ic} ${vv>0?'+':''}${vv}</span>`).join(’’);
+resultBlock=`<div style="padding:16px;background:${vbg};border:1px solid ${vc}40;border-radius:12px"> <div style="font-size:12px;font-weight:600;color:rgba(255,255,255,.55);margin-bottom:5px">Вариант ${label}: ${esc(o.tx)}</div> <div style="font-size:13px;font-weight:700;color:${vc};margin-bottom:4px">${vrd.v}</div> <div style="font-size:11px;color:rgba(255,255,255,.32);font-style:italic;margin-bottom:10px">${esc(vrd.c)}</div> <div style="display:flex;gap:7px;flex-wrap:wrap">${fxRow}</div> </div>`;
+}
+return`<div class="z1 wrap" style="padding-top:18px;padding-bottom:28px">
+${turnStrip()}
+<div class="card afl" style="padding:22px;border-color:${t.color}33">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+<div style="width:10px;height:10px;border-radius:50%;background:${t.color};box-shadow:0 0 8px ${t.color}"></div>
+<div style="font-size:14px;font-weight:700;color:${t.color}">${esc(t.name)} — ${esc(v.title)}</div>
+</div>
+${resultBlock}
+<div style="margin-top:16px">
+<div style="font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Текущие показатели</div>
+${sbar(‘💰 Прибыль’,t.profit,20,statCol(‘profit’,t.profit))}
+${sbar(‘⭐ Репутация’,t.rep,20,statCol(‘rep’,t.rep))}
+${sbar(‘⚖️ Риск’,t.risk,15,statCol(‘risk’,t.risk))}
+</div>
+</div>
+<button class="btn bteal" style="width:100%;margin-top:16px;font-size:16px;padding:14px" onclick="nextTeam()">
+${isLast?‘Перейти к разбору темы →’:‘Следующая команда →’}
+</button>
+
+  </div>`;
+}
+
+function rSummary(){
+const th=THEMES[G.theme];
+const cards=G.teams.map((t,i)=>{
+const vi=G.vmap[G.theme][i];
+const v=th.variants[vi];
+const rec=t.themeHistory[G.theme];
+if(!rec)return’’;
+const vc=rec.type===‘good’?’#22C55E’:rec.type===‘gray’?’#F59E0B’:rec.type===‘timeout’?’#6B7280’:’#EF4444’;
+const vbg=rec.type===‘good’?‘rgba(34,197,94,.07)’:rec.type===‘gray’?‘rgba(245,158,11,.07)’:‘rgba(239,68,68,.07)’;
+return`<div style="flex:1;min-width:175px;background:rgba(8,20,44,.83);border:1px solid ${t.color}33;border-radius:14px;padding:15px"> <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px"><div style="width:7px;height:7px;border-radius:50%;background:${t.color};flex-shrink:0"></div><div style="font-size:12px;font-weight:700;color:${t.color}">${esc(t.name)}</div></div> <div style="font-size:11px;color:rgba(255,255,255,.45);margin-bottom:7px">${v.e} ${esc(v.title)}</div> <div style="padding:9px;background:${vbg};border:1px solid ${vc}33;border-radius:9px"> <div style="font-size:11px;color:rgba(255,255,255,.5);margin-bottom:3px">${esc(rec.choiceTx)}</div> <div style="font-size:12px;font-weight:700;color:${vc}">${esc(rec.verdict)}</div> </div> </div>`;
+}).join(’’);
+const isLast=G.theme===5;
+return`<div class="z1 wrap" style="padding-top:18px;padding-bottom:28px">
+<div style="text-align:center;margin-bottom:18px">
+<div style="font-size:11px;letter-spacing:4px;color:#00D4BB;text-transform:uppercase;margin-bottom:6px">Разбор темы ${G.theme+1}</div>
+<h2 style="font-family:Georgia,serif;font-size:22px;font-weight:700;margin-bottom:4px">${th.e} ${esc(th.title)}</h2>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">${cards}</div>
+<div class="card" style="padding:18px;margin-bottom:14px;border-color:rgba(0,212,187,.14)">
+<div style="font-size:11px;letter-spacing:2px;color:#00D4BB;text-transform:uppercase;margin-bottom:8px">💡 Ключевой вывод</div>
+<p style="font-size:14px;color:rgba(255,255,255,.62);line-height:1.75">${esc(th.compare)}</p>
+<div style="margin-top:10px;font-size:12px;color:rgba(255,255,255,.3);font-style:italic">Норма: ${esc(th.vrd.good.c)}</div>
+</div>
+${miniScores()}
+<button class="btn bteal" style="width:100%;font-size:16px;padding:14px" onclick="afterSummary()">
+${isLast?‘Перейти к финалу →’:‘Следующая тема →’}
+</button>
+
+  </div>`;
+}
+
+function rEvents(){
+const panels=G.teams.map((t,i)=>{
+const ev=t.events[G.eventNum-1];
+const out=G.curOutcomes[i];
+const fxRow=[[‘profit’,‘💰’,out.profit||0],[‘rep’,‘⭐’,out.rep||0],[‘risk’,‘⚖️’,out.risk||0]].filter(x=>x[2]!==0).map(([k,ic,vv])=>`<span style="font-size:12px;font-weight:700;padding:2px 10px;border-radius:12px;background:${fxB(k,vv)};color:${fxC(k,vv)}">${ic} ${vv>0?'+':''}${vv}</span>`).join(’’);
+return`<div style="flex:1;min-width:175px;background:rgba(8,20,44,.83);border:1px solid ${t.color}33;border-radius:14px;padding:16px"> <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px"><div style="width:7px;height:7px;border-radius:50%;background:${t.color};flex-shrink:0"></div><div style="font-size:12px;font-weight:700;color:${t.color}">${esc(t.name)}</div></div> <div style="font-size:24px;text-align:center;margin-bottom:6px">${ev.e}</div> <div style="font-size:13px;font-weight:700;text-align:center;margin-bottom:6px">${esc(ev.t)}</div> <div style="font-size:11px;color:rgba(255,255,255,.4);text-align:center;line-height:1.5;margin-bottom:10px">${esc(ev.tx)}</div> <div style="background:rgba(255,255,255,.04);border-radius:9px;padding:10px;margin-bottom:8px"><div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.5">${esc(out.tx)}</div></div> <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">${fxRow||'<span style="font-size:11px;color:rgba(255,255,255,.3)">Без изменений</span>'}</div> </div>`;
+}).join(’’);
+return`<div class="z1 wrap" style="padding-top:24px;padding-bottom:28px">
+<div style="text-align:center;margin-bottom:20px">
+<div style="font-size:11px;letter-spacing:4px;color:#F59E0B;text-transform:uppercase;margin-bottom:6px">Случайные события</div>
+<h2 style="font-family:Georgia,serif;font-size:24px;font-weight:700;margin-bottom:4px">🎲 Событие ${G.eventNum}</h2>
+<p style="color:rgba(255,255,255,.35);font-size:13px">У каждой команды — своё случайное событие из общего пула</p>
+</div>
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px">${panels}</div>
+<button class="btn bteal" style="width:100%;font-size:16px;padding:14px" onclick="afterEvents()">Продолжить →</button>
+
+  </div>`;
+}
+
+function rHidden(){
+const aff=G.teams.filter(t=>t.fakingRating);
+const names=aff.map(t=>`<span style="color:${t.color};font-weight:700">${esc(t.name)}</span>`).join(’, ‘);
+const fxRow=[[‘profit’,‘💰’,HIDDEN.eff.profit],[‘rep’,‘⭐’,HIDDEN.eff.rep],[‘risk’,‘⚖️’,HIDDEN.eff.risk]].map(([k,ic,vv])=>`<span style="font-size:14px;font-weight:700;padding:4px 13px;border-radius:14px;background:rgba(239,68,68,.12);color:#F87171">${ic} ${vv>0?'+':''}${vv}</span>`).join(’’);
+return`<div class="screen z1"><div style="max-width:560px;width:100%"><div class="card" style="padding:30px;border-color:rgba(239,68,68,.38);box-shadow:0 0 40px rgba(239,68,68,.1)">
+<div style="font-size:48px;text-align:center;margin-bottom:12px">${HIDDEN.e}</div>
+<div style="font-size:11px;letter-spacing:4px;color:#EF4444;text-transform:uppercase;text-align:center;margin-bottom:7px">Скрытые последствия</div>
+<h2 style="font-family:Georgia,serif;font-size:22px;font-weight:700;text-align:center;margin-bottom:14px;color:#FCA5A5">${esc(HIDDEN.t)}</h2>
+<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.18);border-radius:12px;padding:15px;margin-bottom:18px">
+<p style="font-size:14px;color:rgba(255,200,190,.72);line-height:1.8;text-align:center">${esc(HIDDEN.tx)}</p>
+</div>
+<div style="text-align:center;margin-bottom:18px">
+<div style="font-size:12px;color:rgba(255,255,255,.35);margin-bottom:8px">Пострадавшие команды:</div>
+<div style="font-size:15px;margin-bottom:12px">${names}</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">${fxRow}</div>
+</div>
+<button class="btn bteal" style="width:100%;font-size:16px;padding:14px" onclick="afterHidden()">Продолжить →</button>
+
+  </div></div></div>`;
+}
+
+function rFinal(){
+const cards=G.teams.map((t,i)=>{
+const end=getEnding(t),col=t.color,score=t.profit+t.rep-t.risk;
+return`<div class="card afu" style="padding:22px;border-color:${col}33;animation-delay:${i*.1}s;opacity:0"> <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px"> <div style="display:flex;align-items:center;gap:10px"><div style="width:10px;height:10px;border-radius:50%;background:${col}"></div><div style="font-size:16px;font-weight:700;color:${col}">${esc(t.name)}</div></div> <div style="font-size:11px;padding:3px 12px;border-radius:20px;font-weight:700;background:${end.color}22;color:${end.color};border:1px solid ${end.color}44">${end.badge}</div> </div> <div style="display:flex;gap:9px;margin-bottom:14px;flex-wrap:wrap"> ${[['💰 Прибыль',t.profit,'#4ADE80'],['⭐ Репутация',t.rep,'#A78BFA'],['⚖️ Риск',t.risk,'#F87171']].map(([l,vv,c])=>`<div style="flex:1;min-width:70px;background:rgba(255,255,255,.04);border-radius:10px;padding:9px;text-align:center"><div style="font-size:19px;font-weight:700;color:${c}">${vv}</div><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">${l}</div></div>`).join('')} <div style="flex:1;min-width:70px;background:rgba(255,255,255,.04);border-radius:10px;padding:9px;text-align:center"><div style="font-size:19px;font-weight:700;color:${score>=0?'#4ADE80':'#F87171'}">${score>=0?'+':''}${score}</div><div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:2px">📊 Итог</div></div> </div> <div style="text-align:center"><div style="font-size:26px;margin-bottom:5px">${end.emoji}</div><div style="font-size:15px;font-weight:700;color:${end.color};margin-bottom:6px">${end.title}</div><div style="font-size:13px;color:rgba(255,255,255,.48);line-height:1.7">${end.tx}</div></div> </div>`;
+}).join(’’);
+return`<div class="screent z1"><div style="max-width:800px;width:100%;padding-top:12px">
+<div class="afu" style="text-align:center;margin-bottom:26px">
+<div style="font-size:11px;letter-spacing:5px;color:#00D4BB;text-transform:uppercase;margin-bottom:7px">Игра завершена</div>
+<h1 style="font-family:Georgia,serif;font-size:34px;font-weight:700;margin-bottom:8px">🏁 Финальный отчёт</h1>
+<p style="color:rgba(255,255,255,.38);font-size:14px">Ваши решения определили судьбу каждого агентства</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:14px;margin-bottom:22px">${cards}</div>
+<div class="card afu d3" style="padding:22px;margin-bottom:20px;border-color:rgba(0,212,187,.12);text-align:center;opacity:0">
+<div style="font-size:10px;letter-spacing:3px;color:#00D4BB;text-transform:uppercase;margin-bottom:8px">Вывод</div>
+<p style="color:rgba(255,255,255,.45);font-size:13px;line-height:1.85">Манипулятивные PR-практики дают краткосрочную прибыль, но системно разрушают репутацию и накапливают риски. Этичная коммуникация устойчивее в долгосрочной перспективе.<br><em style="color:rgba(255,255,255,.28)">«Репутация зависит не только от законов, но и от этических стандартов» — п. 12.2 Кодекса АКОС</em></p>
+</div>
+<button class="btn bout" style="width:100%" onclick="resetG()">↺ Сыграть заново</button>
+
+  </div></div>`;
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────────────────────
+function R(){
+let h=’’;
+if(G.scr===‘title’)h=rTitle();
+else if(G.scr===‘rules’)h=rRules();
+else if(G.scr===‘setup’)h=rSetup();
+else if(G.scr===‘intro’)h=rIntro();
+else if(G.scr===‘teamplay’)h=rTeamPlay();
+else if(G.scr===‘teamresult’)h=rTeamResult();
+else if(G.scr===‘summary’)h=rSummary();
+else if(G.scr===‘events’)h=rEvents();
+else if(G.scr===‘hidden’)h=rHidden();
+else if(G.scr===‘final’)h=rFinal();
+document.getElementById(‘root’).innerHTML=h;
+}
+
+// ── ACTIONS ───────────────────────────────────────────────────────────────────
+function prepareShuffledOpts(){
+const th=THEMES[G.theme];
+const vi=G.vmap[G.theme][G.curTeam];
+const v=th.variants[vi];
+// Build opts array with type, then shuffle
+const raw=v.opts.map(o=>({type:o.type,tx:o.tx}));
+G.shuffledOpts=sfl(raw);
+}
+
+function pickOpt(idx){
+if(G.choice!==null)return;
+G.choice=idx;R();
+}
+
+function doReveal(){
+clearInterval(TI);G.trun=false;
+const t=G.teams[G.curTeam],th=THEMES[G.theme];
+const vi=G.vmap[G.theme][G.curTeam];
+const v=th.variants[vi];
+
+if(G.choice!==null&&G.choice!==‘TO’){
+const o=G.shuffledOpts[G.choice];
+const sc=th.scores[o.type];
+applyFx(t,sc);
+// Hidden mechanic: theme 2 (index 1), bad choice triggers scandal
+if(G.theme===1&&o.type===‘bad’)t.fakingRating=true;
+const label=[‘А’,‘Б’,‘В’][G.choice];
+t.themeHistory.push({type:o.type,choiceTx:label+’: ‘+o.tx.slice(0,55)+’…’,verdict:th.vrd[o.type].v});
+} else {
+t.themeHistory.push({type:‘timeout’,choiceTx:‘⏱ Время вышло’,verdict:‘Штраф’});
+}
+G.revd=true;G.scr=‘teamresult’;R();
+}
+
+function nextTeam(){
+if(G.curTeam<G.nT-1){
+G.curTeam++;G.choice=null;G.revd=false;G.timer=40;G.tmax=40;G.trun=false;
+prepareShuffledOpts();
+G.scr=‘teamplay’;R();startT();
+} else {
+G.scr=‘summary’;R();
+}
+}
+
+function afterSummary(){
+const next=G.theme+1;
+if(G.theme===1||G.theme===3){
+G.eventNum=G.theme===1?1:2;
+G.curOutcomes=G.teams.map(t=>evtOut(t.events[G.eventNum-1],t));
+G.teams.forEach((t,i)=>applyFx(t,G.curOutcomes[i]));
+G.scr=‘events’;R();return;
+}
+if(next>=6){G.scr=‘final’;R();return;}
+goNextTheme(next);
+}
+
+function afterEvents(){
+const next=G.theme+1;
+if(G.eventNum===2&&G.teams.some(t=>t.fakingRating)&&!G.hiddenShown){
+G.hiddenShown=true;
+G.teams.filter(t=>t.fakingRating).forEach(t=>applyFx(t,HIDDEN.eff));
+G.scr=‘hidden’;R();return;
+}
+if(next>=6){G.scr=‘final’;R();return;}
+goNextTheme(next);
+}
+
+function afterHidden(){
+const next=G.theme+1;
+if(next>=6){G.scr=‘final’;R();return;}
+goNextTheme(next);
+}
+
+function goNextTheme(idx){
+G.theme=idx;G.curTeam=0;G.choice=null;G.revd=false;G.timer=40;G.tmax=40;G.trun=false;
+prepareShuffledOpts();
+G.scr=‘teamplay’;R();startT();
+}
+
+// ── SETUP ─────────────────────────────────────────────────────────────────────
+function setNC(n){
+const tmp=[];for(let i=0;i<G.nT;i++){const el=document.getElementById(‘tn’+i);if(el)tmp.push(el.value);}
+G.nT=n;G.sN=tmp.concat([’’,’’,’’]).slice(0,3);R();
+}
+
+function startG(){
+const names=[];
+for(let i=0;i<G.nT;i++){const el=document.getElementById(‘tn’+i);names.push(el&&el.value.trim()?el.value.trim():`Агентство ${i+1}`);}
+// Variant map: for each theme, each team gets a different variant (shuffled 0,1,2)
+G.vmap=THEMES.map(()=>sfl([0,1,2]).slice(0,G.nT));
+G.teams=TC.slice(0,G.nT).map((col,i)=>{
+const pool=sfl([…RE_POOL]);
+return{name:names[i],color:col,profit:5,rep:5,risk:1,fakingRating:false,timedOut:false,events:[pool[0],pool[1]||pool[0]],themeHistory:[]};
+});
+G.theme=0;G.curTeam=0;G.choice=null;G.revd=false;
+G.timer=40;G.tmax=40;G.trun=false;
+G.eventNum=0;G.curOutcomes=[];G.hiddenShown=false;
+prepareShuffledOpts();
+G.scr=‘intro’;R();
+}
+
+function resetG(){
+clearInterval(TI);
+G={scr:‘title’,nT:3,sN:[’’,’’,’’],teams:[],theme:0,curTeam:0,shuffledOpts:null,choice:null,revd:false,timer:40,tmax:40,trun:false,vmap:[],eventNum:0,curOutcomes:[],hiddenShown:false};
+R();
+}
+
+R();
+</script>
+
+</body>
+</html>
